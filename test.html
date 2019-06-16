@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/css/normalize.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+
+<body onload="startUp()">
+    <h1>Guess a letter</h1>
+    <input id="letter" type="text">
+    <input type="button" value="letter" onClick="Letter()">
+    <p id="answer"></p>
+    <p id="counter"></p>
+    <p id="stat"></p>
+    <script type="text/javascript">
+        var randomWordArr = ["beer", "wine", "chimay", "alcohol", "hey"];
+
+        var randomWord = randomWordArr[Math.floor(Math.random() * randomWordArr.length)];
+
+        var s;
+        var count = 0;
+        //empty array to store the guesses 
+        var answerArray = [];
+        // here we add underscores, the number of undesrcores matches the length of the randomly chosen word...
+        function startUp() {
+            for (var i = 0; i < randomWord.length; i++) {
+                answerArray[i] = "_";
+            }
+            //put them in a string 
+            s = answerArray.join(" ");
+            document.getElementById("answer").innerHTML = s;
+        }
+
+        function Letter() {
+            var letter = document.getElementById("letter").value;
+            if (letter.length > 0) {
+                for (var i = 0; i < randomWord.length; i++) {
+                    if (randomWord[i] === letter) {
+                        answerArray[i] = letter;
+                    }
+
+                }
+                count++;
+                document.getElementById("counter").innerHTML = "No of clicks: " + count;
+                document.getElementById("answer").innerHTML = answerArray.join(" ");
+            }
+            if (count > 5) {
+                document.getElementById("stat").innerHTML = "Come on, you should have guessed it by now";
+            }
+        }
+    </script>
+</body>
+
+</html>
