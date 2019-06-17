@@ -11,19 +11,97 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">    
     <link rel="stylesheet" href="assets/css/normalize.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css">
+
+
+    <style>
+    
+    #hangMan {
+        padding: 10px;
+        margin: 10px;
+        height: 400px;
+        width: 300px;
+        border: 2px solid black;
+    }
+
+    #head {
+        width: 50px;
+     height: 50px;
+  border: solid 2px #1B6CBE;  
+  border-radius: 50%; /* the magic */
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin: 0 auto;
+    } 
+        
+    #body {
+        width: 2px;
+     height: 200px;
+  border: solid 2px #1B6CBE;  
+  border-radius: 50%; /* the magic */
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin: 0 auto;
+
+        
+    }
+    #leftArm {
+        width: 2px;
+     height: 75px;
+  border: solid 2px #1B6CBE;  
+  border-radius: 50%; /* the magic */
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin: 0 auto;
+
+    }
+    #rightArm {
+        width: 2px;
+     height: 75px;
+  border: solid 2px #1B6CBE;  
+  border-radius: 50%; /* the magic */
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin: 0 auto;
+        
+    }
+
+    #leftLeg{
+        width: 2px;
+     height: 100px;
+  border: solid 2px #1B6CBE;  
+  border-radius: 50%; /* the magic */
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin: 0 auto;
+        
+    }
+    #rightLeg{
+        width: 2px;
+     height: 100px;
+  border: solid 2px #1B6CBE;  
+  border-radius: 50%; /* the magic */
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin: 0 auto;
+
+    }
+
+
+    </style>
 </head>
 
-<body onload="playGame()">
+<body onload="reset()">
 
     <h1>HANGMAN GAME</h1>
+    <h2>Can you guess the name of these nefarious creatures?</h2>
     <h2>Press any key to get started</h2>
-    <p id="wins"></p>
-    <p>Current Word</p>
+    <div id="wins"></p>
     <div id="currentWord"></div>
-    <p>Number of guesses remaining</p>
+    <div id="hint"></div>
     <div id="counter"></div>
     <p>Letters Already Guessed</p>
     <div id="lettersGuessed"></div>
@@ -31,6 +109,33 @@
     <div id="hint"></div>
     <p>Status: </p>
     <div id="status"></div>
+
+
+    <div class="container" id="hangMan">
+        <div class="row">
+            <div class="col col-sm-12">
+        <div id="head">head</div>
+        <div id="body">body</div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col col-sm-6">
+        <div id="leftArm">left-arm</div>
+        </div>
+        <div class="col col-sm-6">
+        <div id="rightArm">right-arm</div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col col-sm-6">
+        <div id="leftLeg">left-leg</div>
+    </div>
+    <div class="col col-sm-6">
+        <div id="rightLeg">right-leg</div>
+    </div>
+    </div>
+</div>
+
     <button ID="reset" onclick="reset()">Start Over</Button>
 
     <script type="text/javascript">
@@ -42,15 +147,31 @@
             "zombie",
             "vampire",
             "dragon",
-            "goblin",
-            "ghoul",
-            "me",
-            "you"
+            "werewolf",
+            "bigfoot",
+            "aliens",
+            "witches"
         ];
 
-        var randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+        var hintList = [
+            "unughhhhhhhhhh",
+            "the original creatures of the night",
+            "In some cultures, this creature has fur...",
+            "Definitely NOT man's best friend...",
+            "There's a whole society named after this creature in the Pacific Northwest",
+            "I want to believe",
+            "Known to hang out at Walpurgisnacht"
+        ]
+
+        var lettersGuessedList = [];
+
+        var answerArray = [];
+
+        var randomWord;
 
         var space;
+
+        var hint;
 
         var count = 0;
 
@@ -60,24 +181,26 @@
 
         var counter = document.getElementById("counter");
 
-        var answerArray = [];
 
         function reset() {
-            var count = 0;
+            count = 8;
             counter.innerHTML = "<p>No of attempts: " + count + "</p>";
-            var theAnswer = [];
-            var answerArray = [];
-            var randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+            theAnswer = [];
+            answerArray = [];
+            lettersGuessedList = [];
+            document.getElementById("lettersGuessed").innerHTML = "<p>Letters guessed: " + lettersGuessedList + "</p>";
+            randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+            getHint = wordList.indexOf(randomWord);
+            // console.log(getHint);
+            hint = hintList[getHint];
+            // console.log(hint);
             for (var i = 0; i < randomWord.length; i++) {
                 answerArray[i] = "_";
             };
             space = answerArray.join(" ");
             document.getElementById("currentWord").innerHTML = space;
-        }
 
-        function newRandomWord() {
-            var randomWord = wordList[Math.floor(Math.random() * wordList.length)];
-            console.log(randomWord);
+            // console.log("answerArray[i]: " + answerArray );
         }
 
         function containsAny(source, target) {
@@ -87,21 +210,11 @@
             return (result.length > 0);
         }
 
-        function playGame() {
-            for (var i = 0; i < randomWord.length; i++) {
-                answerArray[i] = "_";
-            };
-            space = answerArray.join(" ");
-            document.getElementById("currentWord").innerHTML = space;
-        }
-
-
-
         document.onkeyup = function(keyPress) {
-            var userDoingOk = false;
             var userGuess = keyPress.key.toLowerCase();
+            var everyLetterGuessed = lettersGuessedList.push(" " + userGuess);
+            document.getElementById("lettersGuessed").innerHTML = "<p>Letters guessed: " + lettersGuessedList + "</p>";
             for (var i = 0; i < randomWord.length; i++) {
-
                 if (randomWord[i] == userGuess) {
                     answerArray[i] = userGuess;
                     var userDoingOk = true;
@@ -109,28 +222,34 @@
                     var userDoingOk = false;
                 }
             }
+            // console.log("answerArray[i]: " + answerArray );
             var theAnswer = answerArray.join("");
-            count++;
-            document.getElementById("counter").innerHTML = "<p>No of attempts: " + count + "</p>";
+            count--;
+            document.getElementById("counter").innerHTML = "<p>No of guesses remaining: " + count + "</p>";
             document.getElementById("currentWord").innerHTML = answerArray.join(" ");
-            if (count > 7 && userDoingOk == false) {
+
+            if (count < 4){
+                document.getElementById("hint").innerHTML = "<p>Hint: " + hint + " </p>";
+            }
+
+            if (count < 1 && userDoingOk == false) {
                 document.getElementById("status").innerHTML = "<p> you die!!!</p>";
                 losses++;
-                console.log("this is from you lose statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
-                    theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
-                reset();
 
+                // console.log("this is from you lose statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
+                //     theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
+                    reset();
 
             } else if (containsAny(wordList, theAnswer) == true) {
                 document.getElementById("status").innerHTML = "<p> you win!!!</p>";
                 wins++;
-                console.log("this is from you win statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
-                    theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
+                // console.log("this is from you win statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
+                //     theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
                 reset();
 
             } else {
-                console.log("this is from final else statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
-                    theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
+                // console.log("this is from final else statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
+                //     theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
 
             }
 
