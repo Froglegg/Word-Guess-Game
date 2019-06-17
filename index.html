@@ -31,14 +31,19 @@
     <div id="hint"></div>
     <p>Status: </p>
     <div id="status"></div>
+    <button ID="reset" onclick="reset()">Start Over</Button>
 
     <script type="text/javascript">
+        //outstanding issues: 
+        // BIG ISSUE: whenever you win, the game doesn't properly reset... it's NOT the if else loop, it's something else... not sure what.
+        // why is the game saying "you win!" when I type out "some" when the word is "something", but not when I type out "dra" for "dragon", for instance???
+
         var wordList = [
             "zombie",
             "vampire",
             "dragon",
             "goblin",
-            "jerseydevil",
+            "ghoul",
             "me",
             "you"
         ];
@@ -49,7 +54,38 @@
 
         var count = 0;
 
+        var losses = 0;
+
+        var wins = 0;
+
+        var counter = document.getElementById("counter");
+
         var answerArray = [];
+
+        function reset() {
+            var count = 0;
+            counter.innerHTML = "<p>No of attempts: " + count + "</p>";
+            var theAnswer = [];
+            var answerArray = [];
+            var randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+            for (var i = 0; i < randomWord.length; i++) {
+                answerArray[i] = "_";
+            };
+            space = answerArray.join(" ");
+            document.getElementById("currentWord").innerHTML = space;
+        }
+
+        function newRandomWord() {
+            var randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+            console.log(randomWord);
+        }
+
+        function containsAny(source, target) {
+            var result = source.filter(function(item) {
+                return target.indexOf(item) > -1
+            });
+            return (result.length > 0);
+        }
 
         function playGame() {
             for (var i = 0; i < randomWord.length; i++) {
@@ -57,65 +93,48 @@
             };
             space = answerArray.join(" ");
             document.getElementById("currentWord").innerHTML = space;
-        };
-
-
-        document.onkeyup = function(keyPress) {
-            var userGuess = keyPress.key;
-            if (userGuess != null) {
-                for (var i = 0; i < randomWord.length; i++) {
-
-                    if (randomWord[i] === userGuess) {
-                        answerArray[i] = userGuess;
-                    }
-                }
-                count++;
-                document.getElementById("counter").innerHTML = "<p>No of attempts: " + count + "</p>";
-                document.getElementById("currentWord").innerHTML = answerArray.join(" ");
-            }
-            if (count > 6) {
-                document.getElementById("status").innerHTML = "<p> you die!!!</p>";
-            }
         }
 
 
-        // function Letter() {
-        //     var letter = document.getElementById("letter").value;
-        //     if (letter.length > 0) {
-        //         for (var i = 0; i < randomWord.length; i++) {
-        //             if (randomWord[i] === letter) {
-        //                 answerArray[i] = letter;
-        //             }
 
-        //         }
-        //         count++;
-        //         document.getElementById("counter").innerHTML = "No of clicks: " + count;
-        //         document.getElementById("answer").innerHTML = answerArray.join(" ");
-        //     }
-        //     if (count > 5) {
-        //         document.getElementById("stat").innerHTML = "Come on, you should have guessed it by now";
-        //     }
-        // }
+        document.onkeyup = function(keyPress) {
+            var userDoingOk = false;
+            var userGuess = keyPress.key.toLowerCase();
+            for (var i = 0; i < randomWord.length; i++) {
+
+                if (randomWord[i] == userGuess) {
+                    answerArray[i] = userGuess;
+                    var userDoingOk = true;
+                } else {
+                    var userDoingOk = false;
+                }
+            }
+            var theAnswer = answerArray.join("");
+            count++;
+            document.getElementById("counter").innerHTML = "<p>No of attempts: " + count + "</p>";
+            document.getElementById("currentWord").innerHTML = answerArray.join(" ");
+            if (count > 7 && userDoingOk == false) {
+                document.getElementById("status").innerHTML = "<p> you die!!!</p>";
+                losses++;
+                console.log("this is from you lose statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
+                    theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
+                reset();
 
 
-        // var currentWordDiv = document.getElementById("currentWord");
-        // // var lettersGuessedDiv = getElementByID("lettersGuessed");
-        // // var hintDiv = getElementByID("hint");
+            } else if (containsAny(wordList, theAnswer) == true) {
+                document.getElementById("status").innerHTML = "<p> you win!!!</p>";
+                wins++;
+                console.log("this is from you win statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
+                    theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
+                reset();
 
-        // //USING VANILLA JS and spelling out the loop
-        // for (var i = 0; i < wordList.length; i++) {
-        //     wordLength = wordList[i].length;
-        // };
+            } else {
+                console.log("this is from final else statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
+                    theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
 
-        // wordList.forEach(function(word) {
-        //     letterSpace = word.length;
-        //     for (var i = 0; i < letterSpace; i++) {
-        //         newLi = document.createElement("li");
-        //         newLi.textContent = letterSpace[i];
-        //         currentWordDiv.appendChild(newLi);
-        //     };
+            }
 
-        // });
+        }
     </script>
     <script src="assets/javascript/game.js" async defer></script>
 </body>
