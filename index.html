@@ -15,87 +15,20 @@
     <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css">
-
-
     <style>
-    
+    .hangManImage {
+        width:100%;
+        height: auto;
+    }
     #hangMan {
-        padding: 10px;
-        margin: 10px;
-        height: 400px;
-        width: 300px;
-        border: 2px solid black;
+        width:400px;
+      
     }
-
-    #head {
-        width: 50px;
-     height: 50px;
-  border: solid 2px #1B6CBE;  
-  border-radius: 50%; /* the magic */
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  margin: 0 auto;
-    } 
-        
-    #body {
-        width: 2px;
-     height: 200px;
-  border: solid 2px #1B6CBE;  
-  border-radius: 50%; /* the magic */
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  margin: 0 auto;
-
-        
-    }
-    #leftArm {
-        width: 2px;
-     height: 75px;
-  border: solid 2px #1B6CBE;  
-  border-radius: 50%; /* the magic */
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  margin: 0 auto;
-
-    }
-    #rightArm {
-        width: 2px;
-     height: 75px;
-  border: solid 2px #1B6CBE;  
-  border-radius: 50%; /* the magic */
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  margin: 0 auto;
-        
-    }
-
-    #leftLeg{
-        width: 2px;
-     height: 100px;
-  border: solid 2px #1B6CBE;  
-  border-radius: 50%; /* the magic */
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  margin: 0 auto;
-        
-    }
-    #rightLeg{
-        width: 2px;
-     height: 100px;
-  border: solid 2px #1B6CBE;  
-  border-radius: 50%; /* the magic */
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  margin: 0 auto;
-
-    }
-
 
     </style>
 </head>
 
 <body onload="reset()">
-
     <h1>HANGMAN GAME</h1>
     <h2>Can you guess the name of these nefarious creatures?</h2>
     <h2>Press any key to get started</h2>
@@ -109,35 +42,10 @@
     <div id="hint"></div>
     <p>Status: </p>
     <div id="status"></div>
-
-
-    <div class="container" id="hangMan">
-        <div class="row">
-            <div class="col col-sm-12">
-        <div id="head">head</div>
-        <div id="body">body</div>
-    </div>
-    </div>
-    <div class="row">
-        <div class="col col-sm-6">
-        <div id="leftArm">left-arm</div>
-        </div>
-        <div class="col col-sm-6">
-        <div id="rightArm">right-arm</div>
-    </div>
-    </div>
-    <div class="row">
-        <div class="col col-sm-6">
-        <div id="leftLeg">left-leg</div>
-    </div>
-    <div class="col col-sm-6">
-        <div id="rightLeg">right-leg</div>
-    </div>
-    </div>
-</div>
-
+    <div id="wins"></div>
+    <div id="losses"></div>
+    <div id="hangMan"></div>
     <button ID="reset" onclick="reset()">Start Over</Button>
-
     <script type="text/javascript">
         //outstanding issues: 
         // BIG ISSUE: whenever you win, the game doesn't properly reset... it's NOT the if else loop, it's something else... not sure what.
@@ -169,22 +77,24 @@
 
         var randomWord;
 
+        var userDoingOk;
+
         var space;
 
         var hint;
 
-        var count = 0;
-
-        var losses = 0;
-
-        var wins = 0;
+        var count;
 
         var counter = document.getElementById("counter");
 
+        var hangMan = document.getElementById("hangMan");
+
 
         function reset() {
-            count = 8;
+            count = 7;
+            hangMan.innerHTML = "<img src='assets/images/hangman-reset.jpg' class='hangManImage'>";
             counter.innerHTML = "<p>No of attempts: " + count + "</p>";
+            document.getElementById("hint").innerHTML = " ";
             theAnswer = [];
             answerArray = [];
             lettersGuessedList = [];
@@ -211,47 +121,70 @@
         }
 
         document.onkeyup = function(keyPress) {
+            document.getElementById("status").innerHTML = "<p> </p>";
             var userGuess = keyPress.key.toLowerCase();
             var everyLetterGuessed = lettersGuessedList.push(" " + userGuess);
             document.getElementById("lettersGuessed").innerHTML = "<p>Letters guessed: " + lettersGuessedList + "</p>";
             for (var i = 0; i < randomWord.length; i++) {
                 if (randomWord[i] == userGuess) {
                     answerArray[i] = userGuess;
-                    var userDoingOk = true;
-                } else {
-                    var userDoingOk = false;
-                }
+                } 
             }
-            // console.log("answerArray[i]: " + answerArray );
+            if (containsAny(answerArray, userGuess) == true){
+                userDoingOk == true;
+            }
+            else {
+                userDoingOk == false;
+                count--;
+            }
+
             var theAnswer = answerArray.join("");
-            count--;
             document.getElementById("counter").innerHTML = "<p>No of guesses remaining: " + count + "</p>";
             document.getElementById("currentWord").innerHTML = answerArray.join(" ");
+
+            if (count == 6){
+                hangMan.innerHTML = "<img src='assets/images/hangman-1.jpg' class='hangManImage'>";
+            }
+            if (count == 5){
+                hangMan.innerHTML = "<img src='assets/images/hangman-2.jpg' class='hangManImage'>";
+                
+            }
+            if (count == 4){
+                hangMan.innerHTML = "<img src='assets/images/hangman-3.jpg' class='hangManImage'>";
+
+                
+            }
+            if (count == 3){
+                hangMan.innerHTML = "<img src='assets/images/hangman-4.jpg' class='hangManImage'>";
+
+                
+            }
+            if (count == 2){
+                hangMan.innerHTML = "<img src='assets/images/hangman-5.jpg'class='hangManImage'>";
+
+                
+            }
+            if (count == 1){
+                hangMan.innerHTML = "<img src='assets/images/hangman-6.jpg' class='hangManImage'>";
+
+            }
+
 
             if (count < 4){
                 document.getElementById("hint").innerHTML = "<p>Hint: " + hint + " </p>";
             }
 
-            if (count < 1 && userDoingOk == false) {
+            if ( count <= 0) {
                 document.getElementById("status").innerHTML = "<p> you die!!!</p>";
+                hangMan.innerHTML = "<img src='assets/images/hangman-dead.jpg' class='hangManImage'>";
                 losses++;
-
-                // console.log("this is from you lose statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
-                //     theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
-                    reset();
+                reset();
 
             } else if (containsAny(wordList, theAnswer) == true) {
                 document.getElementById("status").innerHTML = "<p> you win!!!</p>";
                 wins++;
-                // console.log("this is from you win statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
-                //     theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
                 reset();
-
-            } else {
-                // console.log("this is from final else statement:  " + "random word: " + randomWord + " answer array: " + answerArray + " the answer: " +
-                //     theAnswer + " user doing Ok: " + userDoingOk + " the count: " + count);
-
-            }
+            } 
 
         }
     </script>
