@@ -9,14 +9,14 @@ function preload() {
 
 //-- usage --//
 preload(
-    "assets/images/hangman-reset.jpg",
-    "assets/images/hangman-dead.jpg",
-    "assets/images/hangman-1.jpg",
-    "assets/images/hangman-2.jpg",
-    "assets/images/hangman-3.jpg",
-    "assets/images/hangman-4.jpg",
-    "assets/images/hangman-5.jpg",
-    "assets/images/hangman-6.jpg"
+    "assets/images/Hangman-reset.jpg",
+    "assets/images/Hangman-dead.jpg",
+    "assets/images/Hangman-1.jpg",
+    "assets/images/Hangman-2.jpg",
+    "assets/images/Hangman-3.jpg",
+    "assets/images/Hangman-4.jpg",
+    "assets/images/Hangman-5.jpg",
+    "assets/images/Hangman-6.jpg"
 )
 var wordList = [
     "zombie",
@@ -59,7 +59,7 @@ var hangMan = document.getElementById("hangMan");
 
 function reset() {
     count = 7;
-    hangMan.innerHTML = "<img src='assets/images/hangman-reset.jpg' class='hangManImage'>";
+    hangMan.innerHTML = "<img src='assets/images/Hangman-reset.jpg' class='hangManImage'>";
     counter.innerHTML = "<p>No of attempts: " + count + "</p>";
     document.getElementById("hint").innerHTML = " ";
     theAnswer = [];
@@ -109,29 +109,29 @@ document.onkeyup = function(keyPress) {
     document.getElementById("currentWord").innerHTML = answerArray.join(" ");
 
     if (count == 6) {
-        hangMan.innerHTML = "<img src='assets/images/hangman-1.jpg' class='hangManImage'>";
+        hangMan.innerHTML = "<img src='assets/images/Hangman-1.jpg' class='hangManImage'>";
     }
     if (count == 5) {
-        hangMan.innerHTML = "<img src='assets/images/hangman-2.jpg' class='hangManImage'>";
+        hangMan.innerHTML = "<img src='assets/images/Hangman-2.jpg' class='hangManImage'>";
 
     }
     if (count == 4) {
-        hangMan.innerHTML = "<img src='assets/images/hangman-3.jpg' class='hangManImage'>";
+        hangMan.innerHTML = "<img src='assets/images/Hangman-3.jpg' class='hangManImage'>";
 
 
     }
     if (count == 3) {
-        hangMan.innerHTML = "<img src='assets/images/hangman-4.jpg' class='hangManImage'>";
+        hangMan.innerHTML = "<img src='assets/images/Hangman-4.jpg' class='hangManImage'>";
 
 
     }
     if (count == 2) {
-        hangMan.innerHTML = "<img src='assets/images/hangman-5.jpg'class='hangManImage'>";
+        hangMan.innerHTML = "<img src='assets/images/Hangman-5.jpg'class='hangManImage'>";
 
 
     }
     if (count == 1) {
-        hangMan.innerHTML = "<img src='assets/images/hangman-6.jpg' class='hangManImage'>";
+        hangMan.innerHTML = "<img src='assets/images/Hangman-6.jpg' class='hangManImage'>";
 
     }
 
@@ -142,7 +142,7 @@ document.onkeyup = function(keyPress) {
 
     if (count <= 0) {
         document.getElementById("status").innerHTML = "<p> you die!!!</p>";
-        hangMan.innerHTML = "<img src='assets/images/hangman-dead.jpg' class='hangManImage'>";
+        hangMan.innerHTML = "<img src='assets/images/Hangman-dead.jpg' class='hangManImage'>";
         losses++;
         reset();
 
