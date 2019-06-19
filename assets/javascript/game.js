@@ -136,7 +136,7 @@ document.onkeyup = function(keyPress) {
     }
 
 
-    if (count < 4) {
+    if (count < 6) {
         document.getElementById("hint").innerHTML = "<p>Hint: " + hint + " </p>";
     }
 
